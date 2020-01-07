@@ -1,6 +1,7 @@
 <?php
-//tableau contenant le nom des pays
+//include contenant le tableau des diplômes, des pays, et des nationalités
 include "pays.php";
+//include de validation du formulaire
 include 'form_validation.php';
 ?>
 <!doctype html>
@@ -23,32 +24,33 @@ include 'form_validation.php';
     <body>
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-md-8 bg-success">
+                <div class="col-md-8 alert alert-secondary">
                     <?php
+                    //si post du formulaire complété sans erreurs, affichage du résultat
                     if ($isSubmitted && count($errors) == 0) {
                         ?>
-
-                        <p>Nom : <?= $firstname ?></p>
-                        <p>Prénom : <?= $lastname ?></p>
-                        <p>Date de naissance : <?= $birthdate ?></p>
-                        <p>Pays : <?= $_POST['country'] ?></p>
-                        <p>Nationalité : <?= $nationality ?></p>
-                        <p>Adresse : <?= $address ?></p>
-                        <p>Code postal : <?= $zipcode ?></p>
-                        <p>Ville : <?= $city ?></p>
-                        <p>Email : <?= $mail ?></p>
-                        <p>Téléphone : <?= $phone ?></p>
-                        <p>Diplôme : <?= $_POST['graduation'] ?></p>
-                        <p>Identifiant pôle-emploi : <?= $poleemploi ?></p>
-                        <p>Nombre de badge : <?= $_POST['badge'] ?></p>
-                        <p>Lien codecademy : <?= $codecademylink ?></p>
-                        <p>Super héro : <?= $hero ?></p>
-                        <p>Hack : <?= $hack ?></p>
-                        <p>Expérience : <?= $_POST['experience'] ?></p>
+                    <p>Nom : <mark><?= $firstname ?></mark></p>
+                        <p>Prénom : <mark><?= $lastname ?></mark></p>
+                        <p>Date de naissance : <mark><?= $birthdate ?></mark> (avant conversion)</p>
+                        <p>Date de naissance : <mark><?= strftime('%d-%m-%Y',strtotime($birthdate)) ?></mark> (après conversion)</p>
+                        <p>Pays : <mark><?= $countries[$country] ?></mark></p>
+                        <p>Nationalité : <mark><?= $nationalites[$nationality] ?></mark></p>
+                        <p>Adresse : <mark><?= $address ?></mark></p>
+                        <p>Code postal : <mark><?= $zipcode ?></mark></p>
+                        <p>Ville : <mark><?= $city ?></mark></p>
+                        <p>Email : <mark><?= $mail ?></mark></p>
+                        <p>Téléphone : <mark><?= $phone ?></mark></p>
+                        <p>Diplôme : <mark><?= $graduationOption[$graduation] ?></mark></p>
+                        <p>Identifiant pôle-emploi : <mark><?= $poleemploi ?></mark></p>
+                        <p>Nombre de badge : <mark><?= $badge ?></mark></p>
+                        <p>Lien codecademy : <mark><?= $codecademylink ?></mark></p>
+                        <p>Super héro : <mark><?= $hero ?></mark></p>
+                        <p>Hack : <mark><?= $hack ?></mark></p>
+                        <p>Expérience : <mark><?= ($experience == 1) ? 'oui' : 'non' ?></mark></p>
                         <?php
                     }
                     else{
-                    
+                    //affichage du formulare ou réaffichage si erreurs dans les saisies
                     ?>
                     <form method="post" action="#" novalidate>
                         <div name="bloc1">
@@ -66,7 +68,7 @@ include 'form_validation.php';
                                 </div>
                                 <div class="form-group">
                                     <label for="birthdate">Date de naissance : </label>
-                                    <input type="date" class="form-control" name="birthdate" id="birthdate" min="1900-01-01" max="2020-01-01">
+                                    <input type="date" class="form-control" name="birthdate" id="birthdate" min="1900-01-01" max="2020-01-01" value="<?= $birthdate ?>">
                                     <span class="text-danger"><?= ($errors['birthdate']) ?? '' ?></span>
                                 </div>
                                 <div class="form-group">
@@ -132,11 +134,16 @@ include 'form_validation.php';
                                 <label for="graduation">Diplôme : </label>
                                 <select name="graduation">
                                     <option value="0">-- Choisissez --</option>
-                                    <option value="1">Sans</option>
-                                    <option value="2">Bac</option>
-                                    <option value="3">Bac +2</option>
-                                    <option value="4">Bac +3 ou supérieur</option>
-                                </select>
+                                    <?php foreach ($graduationOption as $graduationOptionid => $graduationOptionName) { ?>
+                                            <option value="<?= $graduationOptionid ?>" 
+                                            <?= ($graduation == $graduationOptionid) ? 'selected' : '' ?>
+                                                    >
+                                                        <?= $graduationOptionName ?>
+                                            </option>
+                                            <?php
+                                        }
+                                        ?>
+                                    </select>
                                 <span class="text-danger"><?= ($errors['graduation']) ?? '' ?></span>
                             </div>
                             <div class="form-group">
@@ -146,7 +153,7 @@ include 'form_validation.php';
                             </div>
                             <div class="form-group">
                                 <label for="badge">Nombre de badge : </label>
-                                <input type="number" class="form-control" name="badge" id="badge" min="0" max="10">
+                                <input type="number" class="form-control" name="badge" id="badge" min="0" max="10" value="<?= $badge ?>">
                                 <span class="text-danger"><?= ($errors['badge']) ?? '' ?></span> <!-- ?? = null coalescing operator voir doc -->
                             </div>
                             <div class="form-group">
@@ -156,14 +163,12 @@ include 'form_validation.php';
                             </div>
                             <div class="form-group">
                                 <label for="hero">Si vous étiez un super héros/une super héroïne, qui seriez-vous et pourquoi ? </label>
-                                <textarea class="form-control" name="hero" id="hero" cols="45" row="8" placeholder="Saisissez votre choix ici" value="<?= $hero ?>">
-                                </textarea>
+                                <textarea class="form-control" name="hero" id="hero" cols="45" row="8"><?= $hero ?></textarea>
                                 <span class="text-danger"><?= ($errors['hero']) ?? '' ?></span>
                             </div>
                             <div class="form-group">
                                 <label for="hack">Racontez-nous un de vos "hacks" (pas forcément technique ou informatique) </label>
-                                <textarea class="form-control" name="hack" id="hack" cols="45" row="8" placeholder="Racontez nous ici" value="<?= $hack ?>">
-                                </textarea>
+                                <textarea class="form-control" name="hack" id="hack" cols="45" row="8" ><?= $hack ?></textarea>
                                 <span class="text-danger"><?= ($errors['hack']) ?? '' ?></span>
                             </div>
                             <div class="form-group">
@@ -171,7 +176,7 @@ include 'form_validation.php';
                                 <label for="experienceoui">oui</label>
                                 <input type="radio" name="experience" id="experienceoui" value="1" <?= ($experience == 1) ? 'checked' : '' ?>/>
                                 <label for="experiencenon">non</label>
-                                <input type="radio" name="experience" id="experiencenon" value="0"  <?= ($experience == 0) ? 'checked' : '' ?>/>
+                                <input type="radio" name="experience" id="experiencenon" value="2"  <?= ($experience == 2) ? 'checked' : '' ?>/>
                                 <span class="text-danger"><?= ($errors['experience']) ?? '' ?></span>
                             </div>
                         </div>

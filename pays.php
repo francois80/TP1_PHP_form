@@ -1,4 +1,8 @@
 <?php
+//tableau du niveau d'étude
+$graduationOption = [1 => 'Sans', 'Bac', 'Bac +2', 'Bac +3 ou supérieur'];
+
+//tableau des pays 
 $countries = [1 =>"Afghanistan", "Albania", "Algeria", "American Samoa", "Andorra", "Angola", "Anguilla",
         "Antarctica", "Antigua and Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan",
         "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda",
@@ -35,6 +39,7 @@ $countries = [1 =>"Afghanistan", "Albania", "Algeria", "American Samoa", "Andorr
         "Uruguay", "Uzbekistan", "Vanuatu", "Venezuela", "Vietnam", "Virgin Islands (British)", "Virgin Islands (U.S.)",
         "Wallis and Futuna Islands", "Western Sahara", "Yemen", "Yugoslavia", "Zambia", "Zimbabwe"];
 
+//tableau des nationalités
 $nationalites = [1 =>'Afghane', 'Albanaise', 'Algerienne', 'Allemande', 'Americaine', 'Andorrane', 'Angolaise',
         'Antiguaise et barbudienne', 'Argentine', 'Armenienne', 'Australienne', 'Autrichienne', 'Azerbaïdjanaise',
         'Bahamienne', 'Bahreinienne', 'Bangladaise', 'Barbadienne', 'Belge', 'Belizienne', 'Beninoise',
